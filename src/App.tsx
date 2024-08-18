@@ -11,6 +11,15 @@ class Core {
 
   state = {
     title: "Hello World",
+    age: 1,
+  };
+
+  setState = (state: Partial<Core["state"]>) => {
+    this.state = {
+      ...this.state,
+      ...state,
+    };
+    this.updater();
   };
 
   getComputed = () => {
@@ -24,8 +33,9 @@ class Core {
   };
 
   updateTitle = (newTitle = "newTitle") => {
-    this.state.title = newTitle;
-    this.updater();
+    this.setState({
+      title: newTitle,
+    });
   };
 
   getProps = () => {
