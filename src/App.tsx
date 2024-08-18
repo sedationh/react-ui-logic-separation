@@ -5,7 +5,7 @@ type A = ReturnType<Core["getProps"]>;
 class Core {
   updater: () => void;
 
-  constructor(updater) {
+  constructor(updater: () => void) {
     this.updater = updater;
   }
 
@@ -14,9 +14,12 @@ class Core {
   };
 
   getComputed = () => {
+    const titleWith666 = () => this.state.title + "666";
+    const titleWith666And777 = () => titleWith666() + "777";
+
     return {
-      titleWith666: this.state.title + "666",
-      // titleWith666And777: this.computed.titleWith666 + "777",
+      titleWith666: titleWith666(),
+      titleWith666And777: titleWith666And777(),
     };
   };
 
@@ -51,7 +54,7 @@ function UI({ state, methods, computed }: A) {
 }
 
 function App() {
-  const coreRef = useRef<Core>(null);
+  const coreRef = useRef<Core | null>(null);
 
   const [, forceUpdate] = useReducer((c) => c + 1, 0);
 
