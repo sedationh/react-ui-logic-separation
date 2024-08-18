@@ -13,6 +13,13 @@ class Core {
     title: "Hello World",
   };
 
+  getComputed = () => {
+    return {
+      titleWith666: this.state.title + "666",
+      // titleWith666And777: this.computed.titleWith666 + "777",
+    };
+  };
+
   updateTitle = (newTitle = "newTitle") => {
     this.state.title = newTitle;
     this.updater();
@@ -24,14 +31,18 @@ class Core {
       methods: {
         updateTitle: this.updateTitle,
       },
+      computed: this.getComputed(),
     };
   };
 }
 
-function UI({ state, methods }: A) {
+function UI({ state, methods, computed }: A) {
   return (
     <div>
+      <h2>state</h2>
       <pre>{JSON.stringify(state, null, 2)}</pre>
+      <h2>computed</h2>
+      <pre>{JSON.stringify(computed, null, 2)}</pre>
       <button onClick={() => methods.updateTitle(state.title + "1")}>
         Update Title
       </button>
