@@ -63,19 +63,27 @@ function UI({ state, methods, computed }: A) {
   );
 }
 
+function withCore<P extends A>(WrappedComponent: React.ComponentType<P>) {
+  return function WithCore(props: Omit<P, keyof A>) {
+    const coreRef = useRef<Core | null>(null);
+    const [, forceUpdate] = useReducer((c) => c + 1, 0);
+
+    if (coreRef.current === null) {
+      coreRef.current = new Core(forceUpdate);
+    }
+
+    const coreProps = coreRef.current.getProps();
+
+    return <WrappedComponent {...(props as P)} {...coreProps} />;
+  };
+}
+
+const UIWithCore = withCore(UI);
+
 function App() {
-  const coreRef = useRef<Core | null>(null);
-
-  const [, forceUpdate] = useReducer((c) => c + 1, 0);
-
-  if (coreRef.current === null) {
-    coreRef.current = new Core(forceUpdate);
-  }
-
   return (
     <div>
-      <h1>UI</h1>
-      <UI {...coreRef.current.getProps()} />
+      <UIWithCore />
     </div>
   );
 }
